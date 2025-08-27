@@ -2,6 +2,7 @@ package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
 import main.java.com.taskmanager.persistence.FileHandler;
+import main.java.com.taskmanager.util.Messages;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -13,27 +14,21 @@ public class UpdateTaskStatus {
     public static void UpdateTaskStatusForm(Map<Integer, Task> tasks, Scanner scanner) {
         boolean openUpdateTaskStatusForm = true;
 
-        System.out.println("""
-                
-                To update the status of a task, please enter the associated task 'id' located in the 'data/tasks.csv'
-                    directory. Additionally, the task 'id' can be located by selecting 'List Tasks', then by
-                    selecting either 'All', 'Completed', or 'Pending' from the Task Manager Main Menu.
-                
-                """);
+        System.out.println(Messages.TASK_ID_VIEW);
 
         while (openUpdateTaskStatusForm) {
 
             Integer taskIdToUpdate = promptTaskId(tasks, scanner);
             Task taskToUpdate = tasks.get(taskIdToUpdate);
-            System.out.println("\nSuccessfully found task: \n" + taskToUpdate);
+            System.out.println(Messages.TASK_FOUND + taskToUpdate);
 
             String currentTaskStatus = taskToUpdate.getStatus();
-            System.out.println("\nThe current status for this task is: " + currentTaskStatus);
+            System.out.println(Messages.UPDATE_TASK_STATUS_CURRENT + currentTaskStatus);
 
             String updatedTaskStatus = "PENDING".equalsIgnoreCase(currentTaskStatus) ? "COMPLETED" : "PENDING";
 
-            System.out.println("Do you want to update the status of this task to: '" + updatedTaskStatus + "'?");
-            System.out.println("1. Yes\n2. Cancel Update");
+            System.out.println(Messages.UPDATE_TASK_STATUS_CONFIRM + updatedTaskStatus);
+            System.out.println(Messages.TASK_CHANGE_CONFIRM);
 
             String inputStatusUpdate = promptChangeStatus(scanner);
 
@@ -42,12 +37,12 @@ public class UpdateTaskStatus {
                 taskToUpdate.setStatus(updatedTaskStatus);
                 FileHandler.saveTasks(tasks);
 
-                System.out.println("\nSuccessfully updated task status! Returning to Task Manager main menu...");
+                System.out.println(Messages.UPDATE_TASK_STATUS_SUCCESS);
                 openUpdateTaskStatusForm = false;
-
+ 
             }
             if ("2".equals(inputStatusUpdate)) {
-                System.out.println("Canceling updating task status. Returning to Task Manager main menu...");
+                System.out.println(Messages.UPDATE_TASK_STATUS_CANCEL);
                 openUpdateTaskStatusForm = false;
             }
         }
@@ -58,7 +53,7 @@ public class UpdateTaskStatus {
         Integer taskIdToUpdate = null;
 
         while (taskIdToUpdate == null) {
-            System.out.print("Enter ID: ");
+            System.out.print(Messages.TASK_ID_PROMPT);
             String input = scanner.nextLine().trim();
 
             try {
@@ -70,7 +65,7 @@ public class UpdateTaskStatus {
                         .orElse(null);
 
                 if (taskIdToUpdate == null) {
-                    System.out.println("Unable to find task 'id'. Please double check task 'id' and try again...");
+                    System.out.println(Messages.INVALID_INPUT_TASK_ID);
                 }
 
             } catch (Exception e) {
@@ -90,7 +85,7 @@ public class UpdateTaskStatus {
             input = scanner.nextLine().trim();
 
             if (!"1".equals(input) && !"2".equals(input)) {
-                System.out.println("Invalid input, please enter '1' to update status or '2; to cancel updating task");
+                System.out.println(Messages.INVALID_INPUT_UPDATE_TASK_STATUS);
             }
         }
 

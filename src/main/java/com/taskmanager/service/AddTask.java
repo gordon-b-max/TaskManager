@@ -2,6 +2,7 @@ package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
 import main.java.com.taskmanager.persistence.FileHandler;
+import main.java.com.taskmanager.util.Messages;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class AddTask {
     public static void AddTaskForm(Map<Integer, Task> tasks, Scanner scanner) {
         boolean openAddTaskForm = true;
 
-        System.out.println("\nTo add a task, please enter the following information with the specified format:");
+        System.out.println(Messages.ADD_TASK_VIEW);
 
         while (openAddTaskForm) {
 
@@ -22,8 +23,8 @@ public class AddTask {
                     .max(Integer::compareTo)
                     .orElse(0) + 1;
 
-            String taskTitle = promptTitleOrDescription("Enter Title: ", scanner);
-            String taskDescription = promptTitleOrDescription("Enter Description: ", scanner);
+            String taskTitle = promptTitleOrDescription(Messages.ADD_TASK_TITLE, scanner);
+            String taskDescription = promptTitleOrDescription(Messages.ADD_TASK_DESCRIPTION, scanner);
 
             String taskStatus = promptStatus(scanner);
 
@@ -46,7 +47,7 @@ public class AddTask {
             input = scanner.nextLine().trim();
 
             if (input.contains(",")) {
-                System.out.println("Invalid input, please remove commas from text and try again");
+                System.out.println(Messages.INVALID_INPUT_ADD_TASK_TITLE_OR_DESCRIPTION);
                 input = "";
             }
         }
@@ -59,11 +60,11 @@ public class AddTask {
         String status = "";
 
         while (!"COMPLETED".equals(status) && !"PENDING".equals(status)) {
-            System.out.print("Enter status (PENDING/COMPLETED): ");
+            System.out.print(Messages.ADD_TASK_STATUS);
             status = scanner.nextLine().trim().toUpperCase();
 
             if (!"COMPLETED".equals(status) && !"PENDING".equals(status)) {
-                System.out.println("Invalid status, please enter status as: PENDING or COMPLETED");
+                System.out.println(Messages.INVALID_INPUT_ADD_TASK_STATUS);
             }
         }
 
@@ -75,13 +76,13 @@ public class AddTask {
         LocalDate dueDate = null;
 
         while (dueDate == null) {
-            System.out.print("Enter due date (YYYY-MM-DD): ");
+            System.out.print(Messages.ADD_TASK_DUE_DATE);
             String input = scanner.nextLine().trim();
 
             try {
                 dueDate = LocalDate.parse(input);
             } catch (Exception e) {
-                System.out.println("Invalid date, please use date format: YYYY-MM-DD");
+                System.out.println(Messages.INVALID_INPUT_ADD_TASK_DUE_DATE);
             }
         }
 

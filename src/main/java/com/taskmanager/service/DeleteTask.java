@@ -2,6 +2,7 @@ package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
 import main.java.com.taskmanager.persistence.FileHandler;
+import main.java.com.taskmanager.util.Messages;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -13,64 +14,55 @@ public class DeleteTask {
     public static void DeleteTaskForm(Map<Integer, Task> tasks, Scanner scanner) {
         boolean openDeleteTaskForm = true;
 
-        System.out.println("""
-                
-                To delete a task, please enter the associated task 'id' located in the 'data/tasks.csv'
-                    directory. Additionally, the task 'id' can be located by selecting 'List Tasks', then by
-                    selecting either 'All', 'Completed', or 'Pending' from the Task Manager Main Menu.
-                """);
-
+        System.out.println(Messages.TASK_ID_VIEW);
 
         while (openDeleteTaskForm) {
 
-            Integer taskIdToDelete = promptTaskId(tasks, scanner);
-            Task taskToDelete = tasks.get(taskIdToDelete);
-            System.out.println("\nSuccessfully found task: \n" + taskToDelete);
+            Task taskToDelete = promptTaskId(tasks, scanner);
+            System.out.println(Messages.TASK_FOUND + taskToDelete);
 
-            System.out.println("\nTo delete the task, please press '1' to confirm or '2' to cancel and " +
-                    "return to the Task Manager Main Menu");
+            System.out.println(Messages.DELETE_TASK_CONFIRM);
+            System.out.println(Messages.TASK_CHANGE_CONFIRM);
 
             String inputDeleteTask = promptDeleteTask(scanner);
 
             if ("1".equals(inputDeleteTask)) {
 
-                tasks.remove(taskIdToDelete);
+                tasks.remove(taskToDelete.getId());
                 FileHandler.saveTasks(tasks);
 
-                System.out.println("\nSuccessfully deleted task! Returning to Task Manager main menu...");
+                System.out.println(Messages.DELETE_TASK_SUCCESS);
                 openDeleteTaskForm = false;
 
             }
             if ("2".equals(inputDeleteTask)) {
-                System.out.println("Canceling task deletion. Returning to Task Manager main menu...");
+                System.out.println(Messages.DELETE_TASK_CANCEL);
                 openDeleteTaskForm = false;
             }
         }
     }
 
 
-    private static Integer promptTaskId(Map<Integer, Task> tasks, Scanner scanner) {
-        Integer taskIdToUpdate = null;
+    private static Task promptTaskId(Map<Integer, Task> tasks, Scanner scanner) {
+        Integer taskIdToDelete = null;
 
-        while (taskIdToUpdate == null) {
-            System.out.print("Enter ID: ");
+        while (taskIdToDelete == null) {
+            System.out.print(Messages.TASK_ID_PROMPT);
             String input = scanner.nextLine().trim();
 
-            try {
-                int parsedId = Integer.parseInt(input);
+            int parsedId = Integer.parseInt(input);
 
-                taskIdToUpdate = tasks.keySet().stream()
-                        .filter(taskId -> taskId.equals(parsedId))
-                        .findFirst()
-                        .orElse(null);
+            taskIdToDelete = tasks.keySet().stream()
+                    .filter(taskId -> taskId.equals(parsedId))
+                    .findFirst()
+                    .orElse(null);
 
-            } catch (Exception e) {
-                System.out.println("Unable to find task 'id' with error message: " + e.getMessage());
-                System.out.println("Please double check task 'id' and try again...");
+            if (taskIdToDelete == null) {
+                System.out.println(Messages.INVALID_INPUT_TASK_ID);
             }
         }
 
-        return taskIdToUpdate;
+        return tasks.get(taskIdToDelete);
     }
 
 
@@ -82,7 +74,7 @@ public class DeleteTask {
             input = scanner.nextLine().trim();
 
             if (!"1".equals(input) && !"2".equals(input)) {
-                System.out.println("Invalid input, please enter '1' to delete task or '2' to cancel deleting task");
+                System.out.println(Messages.INVALID_INPUT_TASK_ID);
             }
         }
 

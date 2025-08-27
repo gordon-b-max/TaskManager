@@ -6,6 +6,7 @@ import main.java.com.taskmanager.service.DeleteTask;
 import main.java.com.taskmanager.service.ListTasks;
 import main.java.com.taskmanager.service.AddTask;
 import main.java.com.taskmanager.service.UpdateTaskStatus;
+import main.java.com.taskmanager.util.Messages;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,27 +24,26 @@ public class Menu {
 
         Map<Integer, Task> tasks = FileHandler.loadTasks();
         if (tasks == null) {
-            System.out.println("Do you want to create a new file? Press '1' to confirm or '2' to close application");
+            System.out.println(Messages.CREATE_NEW_FILE_PROMPT);
             String inputCreateNewFile = promptCreateNewFile();
 
             if ("1".equals(inputCreateNewFile)) {
                 tasks = new HashMap<>();
 
                 FileHandler.createNewFile();
-                System.out.println("\nSuccessfully created new file to store tasks!" +
-                        " Opening Task Manager main menu...\n");
+                System.out.println(Messages.CREATE_NEW_FILE_SUCCESS);
 
             }
             if ("2".equals(inputCreateNewFile)) {
-                System.out.println("\nCanceling file creation. Closing Task Manager application...");
+                System.out.println(Messages.CREATE_NEW_FILE_CANCEL);
                 System.exit(0);
             }
         }
 
-        System.out.println("\nHello SAS! Welcome to the Task Manager Menu");
+        System.out.println(Messages.MENU_WELCOME);
 
         while (openMainMenu) {
-            showMenu();
+            System.out.println(Messages.MENU_OPTIONS);
 
             String input = scanner.nextLine().trim();
             switch (input) {
@@ -52,24 +52,9 @@ public class Menu {
                 case "3" -> UpdateTaskStatus.UpdateTaskStatusForm(tasks, scanner);
                 case "4" -> DeleteTask.DeleteTaskForm(tasks, scanner);
                 case "5" -> openMainMenu = false;
-                default -> System.out.println("Invalid action. Please enter an action numerically 1-5");
+                default -> System.out.println(Messages.INVALID_INPUT_MENU);
             }
         }
-    }
-
-
-    private static void showMenu() {
-        System.out.print("""
-                
-                ==== Task Manager Main Menu ====
-                Please select one of the following actions numerically on the menu below (1-5):
-                1. List Tasks
-                2. Add Task
-                3. Update Task Status
-                4. Delete Task
-                5. Exit Menu
-                """
-        );
     }
 
 
@@ -81,7 +66,7 @@ public class Menu {
             input = Menu.scanner.nextLine().trim();
 
             if (!"1".equals(input) && !"2".equals(input)) {
-                System.out.println("Invalid input, please enter '1' to create a new file or '2' to cancel");
+                System.out.println(Messages.INVALID_INPUT_CREATE_NEW_FILE);
             }
         }
 

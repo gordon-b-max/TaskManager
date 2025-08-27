@@ -1,6 +1,7 @@
 package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
+import main.java.com.taskmanager.util.Messages;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -14,7 +15,7 @@ public class ListTasks {
         boolean openListMenu = true;
 
         while (openListMenu) {
-            showListMenu();
+            System.out.println(Messages.LIST_TASKS_VIEW);
 
             String input = scanner.nextLine().trim();
             switch (input) {
@@ -22,20 +23,20 @@ public class ListTasks {
                 case "2" -> showCompletedTasks(tasks);
                 case "3" -> showPendingTasks(tasks);
                 case "4" -> openListMenu = false;
-                default -> System.out.println("Invalid action. Please enter an action numerically 1-4");
+                default -> System.out.println(Messages.INVALID_INPUT_LIST_OPTIONS);
             }
         }
     }
 
 
     private static void showAllTasks(Map<Integer, Task> tasks) {
-        System.out.println("\nAll Tasks:");
+        System.out.println(Messages.LIST_TASKS_ALL);
         tasks.values().forEach(System.out::println);
     }
 
 
     private static void showCompletedTasks(Map<Integer, Task> tasks) {
-        System.out.println("\nCompleted Tasks:");
+        System.out.println(Messages.LIST_TASKS_COMPLETED);
         tasks.values().stream()
                 .filter(task -> "COMPLETED".equalsIgnoreCase(task.getStatus()))
                 .forEach(System.out::println);
@@ -43,22 +44,9 @@ public class ListTasks {
 
 
     private static void showPendingTasks(Map<Integer, Task> tasks) {
-        System.out.println("\nPending Tasks:");
+        System.out.println(Messages.LIST_TASKS_PENDING);
         tasks.values().stream()
                 .filter(task -> "PENDING".equalsIgnoreCase(task.getStatus()))
                 .forEach(System.out::println);
-    }
-
-
-    private static void showListMenu() {
-        System.out.print("""
-                
-                Please select which tasks to display on the menu below: (1-4)
-                1. List All Tasks
-                2. List Completed Tasks
-                3. List Pending Tasks
-                4. Return to Main Menu
-                """
-        );
     }
 }

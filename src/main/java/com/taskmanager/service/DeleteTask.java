@@ -6,9 +6,13 @@ import main.java.com.taskmanager.util.Messages;
 
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class DeleteTask {
+
+    private static final Logger LOGGER = Logger.getLogger(DeleteTask.class.getName());
 
 
     public static void DeleteTaskForm(Map<Integer, Task> tasks, Scanner scanner) {
@@ -31,12 +35,14 @@ public class DeleteTask {
                 tasks.remove(taskToDelete.getId());
                 FileHandler.saveTasks(tasks);
 
-                System.out.println(Messages.DELETE_TASK_SUCCESS);
+                LOGGER.log(Level.INFO, Messages.DELETE_TASK_SUCCESS);
+                System.out.println(Messages.RETURN_TO_MAIN_MENU);
                 openDeleteTaskForm = false;
 
             }
             if ("2".equals(inputDeleteTask)) {
-                System.out.println(Messages.DELETE_TASK_CANCEL);
+                LOGGER.log(Level.INFO, Messages.DELETE_TASK_CANCEL);
+                System.out.println(Messages.RETURN_TO_MAIN_MENU);
                 openDeleteTaskForm = false;
             }
         }

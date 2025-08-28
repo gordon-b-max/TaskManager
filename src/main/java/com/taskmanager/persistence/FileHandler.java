@@ -11,14 +11,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import main.java.com.taskmanager.model.Task;
+import main.java.com.taskmanager.util.Messages;
 
 
 public class FileHandler {
 
-    private static final String FILE_NAME = "src/main/resources/data/tasks.csv";
-    private static final String HEADERS = "id,title,description,status,dueDate\n";
+    public static final String FILE_NAME = "src/main/resources/data/tasks.csv";
+    private static final String FILE_HEADERS = "id,title,description,status,dueDate\n";
+
+    private static final Logger LOGGER = Logger.getLogger(FileHandler.class.getName());
 
 
     public static Map<Integer, Task> loadTasks() {
@@ -29,7 +34,7 @@ public class FileHandler {
         File file = new File(FILE_NAME);
 
         if (!file.exists()) {
-            System.out.println("\nFile does not exist in folder: " + FILE_NAME);
+            LOGGER.log(Level.WARNING, Messages.FILE_HANDLER_FILE_NOT_FOUND + FILE_NAME);
             return null;
         }
 
@@ -49,18 +54,15 @@ public class FileHandler {
                     Task overwrittenTask = tasks.put(processedTask.getId(), processedTask);
 
                     if (overwrittenTask != null) {
-                        System.out.println("\nWarning, the following task has a duplicated 'id' field and was" +
-                                " overwritten locally:");
-                        System.out.println(overwrittenTask);
-                        System.out.println("Please check and update the CSV file located in the '" + FILE_NAME +
-                                "' directory before proceeding to avoid losing task data");
+                        LOGGER.log(Level.WARNING, Messages.FILE_HANDLER_WARNING_DUPLICATED_TASK + overwrittenTask);
                     }
                 }
             }
             return tasks;
 
         } catch (IOException e) {
-            System.out.println("Error loading tasks file: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, Messages.FILE_HANDLER_ERROR_LOAD_FILE + FILE_NAME +
+                    Messages.FILE_HANDLER_ERROR_MESSAGE, e);
             return null;
         }
     }
@@ -72,11 +74,7 @@ public class FileHandler {
         List<String> taskFields = new ArrayList<>(Arrays.asList(taskSplit));
 
         if (taskFields.size() != 5) {
-            System.out.println("\nWarning, the following task has missing or malformed data and was not processed:");
-            System.out.println("{ " + taskLine + " }");
-            System.out.println("Please check and update the CSV file located in the '" + FILE_NAME +
-                    "' directory before proceeding to avoid permanently losing task data");
-
+            LOGGER.log(Level.WARNING, Messages.FILE_HANDLER_WARNING_PROCESS_TASK + taskLine);
             return null;
         }
 
@@ -90,11 +88,8 @@ public class FileHandler {
             return new Task(taskId, taskTitle, taskDescription, taskStatus, taskDueDate);
 
         } catch (Exception e) {
-            System.out.println("\nWarning, the following task has missing or malformed data and was not processed:");
-            System.out.println("{ " + taskLine + " } \n with error message: " + e.getMessage());
-            System.out.println("Please check and update the CSV file located in the '" + FILE_NAME +
-                    "' directory before proceeding to avoid permanently losing task data");
-
+            LOGGER.log(Level.WARNING, Messages.FILE_HANDLER_WARNING_PROCESS_TASK + taskLine +
+                    Messages.FILE_HANDLER_ERROR_MESSAGE, e);
             return null;
         }
     }
@@ -113,11 +108,12 @@ public class FileHandler {
                     newTask.getStatus() + "," +
                     newTask.getDueDate() + "\n");
 
-            System.out.println("\nSuccessfully added a new task with id: " + newTask.getId());
-            System.out.println("Returning to the Task Manager Main Menu...");
+            LOGGER.log(Level.INFO, Messages.ADD_TASK_SUCCESS + newTask.getId());
+            System.out.println(Messages.RETURN_TO_MAIN_MENU);
 
         } catch(IOException e) {
-            System.out.println("Error saving new task to '" + FILE_NAME + "' directory with error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE,Messages.FILE_HANDLER_ERROR_SAVE_NEW_TASK + FILE_NAME +
+                    Messages.FILE_HANDLER_ERROR_MESSAGE, e);
         }
     }
 
@@ -126,7 +122,7 @@ public class FileHandler {
 
         try (FileWriter fileWriter = new FileWriter(FILE_NAME)) {
 
-            fileWriter.write(HEADERS);
+            fileWriter.write(FILE_HEADERS);
 
             for (Task task : tasks.values()) {
                 fileWriter.write(
@@ -140,7 +136,7 @@ public class FileHandler {
             FileHandler.loadTasks();
 
         } catch(IOException e) {
-            System.out.println("Error saving tasks to '" + FILE_NAME + "' directory with error: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, Messages.FILE_HANDLER_ERROR_SAVE_TASKS + FILE_NAME, e);
         }
     }
 
@@ -149,11 +145,10 @@ public class FileHandler {
 
         try (FileWriter fileWriter = new FileWriter(FILE_NAME)) {
 
-            fileWriter.write(HEADERS);
+            fileWriter.write(FILE_HEADERS);
 
         } catch(IOException e) {
-            System.out.println("Error creating new file in '" + FILE_NAME + "' directory " +
-                    "with error message: " + e.getMessage());
+            LOGGER.log(Level.SEVERE, Messages.FILE_HANDLER_ERROR_CREATE_NEW_FILE + FILE_NAME, e);
         }
     }
 }

@@ -24,7 +24,9 @@ public class Menu {
 
         Map<Integer, Task> tasks = FileHandler.loadTasks();
         if (tasks == null) {
+
             System.out.println(Messages.CREATE_NEW_FILE_PROMPT);
+            System.out.println(Messages.TASK_CHANGE_CONFIRM);
             String inputCreateNewFile = promptCreateNewFile();
 
             if ("1".equals(inputCreateNewFile)) {
@@ -63,7 +65,7 @@ public class Menu {
 
         while (input.isEmpty()) {
 
-            input = Menu.scanner.nextLine().trim();
+            input = scanner.nextLine().trim();
 
             if (!"1".equals(input) && !"2".equals(input)) {
                 System.out.println(Messages.INVALID_INPUT_CREATE_NEW_FILE);

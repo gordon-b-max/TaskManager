@@ -1,16 +1,17 @@
 package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
+import main.java.com.taskmanager.model.TaskCollection;
 import main.java.com.taskmanager.util.Messages;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class ListTasks {
 
 
-    public static void ListOptions(Map<Integer, Task> tasks, Scanner scanner) {
+    public static void ListOptions(TaskCollection tasks, Scanner scanner) {
 
         boolean openListMenu = true;
 
@@ -18,35 +19,43 @@ public class ListTasks {
             System.out.println(Messages.LIST_TASKS_VIEW);
 
             String input = scanner.nextLine().trim();
+
             switch (input) {
-                case "1" -> showAllTasks(tasks);
-                case "2" -> showCompletedTasks(tasks);
-                case "3" -> showPendingTasks(tasks);
-                case "4" -> openListMenu = false;
+
+                case Messages.INPUT_1 -> showAllTasks(tasks);
+
+                case Messages.INPUT_2 -> showCompletedTasks(tasks);
+
+                case Messages.INPUT_3 -> showPendingTasks(tasks);
+
+                case Messages.INPUT_4 -> openListMenu = false;
+
                 default -> System.out.println(Messages.INVALID_INPUT_LIST_OPTIONS);
             }
         }
     }
 
 
-    private static void showAllTasks(Map<Integer, Task> tasks) {
+    private static void showAllTasks(TaskCollection tasks) {
+        List<Task> listAllTasks = tasks.listAllTasks();
+
         System.out.println(Messages.LIST_TASKS_ALL);
-        tasks.values().forEach(System.out::println);
+        listAllTasks.forEach(System.out::println);
     }
 
 
-    private static void showCompletedTasks(Map<Integer, Task> tasks) {
+    private static void showCompletedTasks(TaskCollection tasks) {
+        List<Task> listCompletedTasks = tasks.listCompletedTasks();
+
         System.out.println(Messages.LIST_TASKS_COMPLETED);
-        tasks.values().stream()
-                .filter(task -> "COMPLETED".equalsIgnoreCase(task.getStatus()))
-                .forEach(System.out::println);
+        listCompletedTasks.forEach(System.out::println);
     }
 
 
-    private static void showPendingTasks(Map<Integer, Task> tasks) {
+    private static void showPendingTasks(TaskCollection tasks) {
+        List<Task> listPendingTasks = tasks.listPendingTasks();
+
         System.out.println(Messages.LIST_TASKS_PENDING);
-        tasks.values().stream()
-                .filter(task -> "PENDING".equalsIgnoreCase(task.getStatus()))
-                .forEach(System.out::println);
+        listPendingTasks.forEach(System.out::println);
     }
 }

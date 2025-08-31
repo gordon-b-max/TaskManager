@@ -5,14 +5,18 @@ import java.time.LocalDate;
 
 public class Task {
 
-    private int id;
-    private String title;
-    private String description;
-    private String status; // "PENDING" or "COMPLETED"
-    private LocalDate dueDate;
+    private final int id;
+
+    private final String title;
+
+    private final String description;
+
+    private TaskStatus status;
+
+    private final LocalDate dueDate;
 
 
-    public Task(int id, String title, String description, String status, LocalDate dueDate) {
+    public Task(int id, String title, String description, TaskStatus status, LocalDate dueDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -21,44 +25,27 @@ public class Task {
     }
 
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getId() { return id; }
 
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() {
+    public TaskStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public LocalDate getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
     }
 
 

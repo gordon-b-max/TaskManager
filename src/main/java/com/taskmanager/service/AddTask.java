@@ -1,39 +1,46 @@
 package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
+import main.java.com.taskmanager.model.TaskStatus;
+import main.java.com.taskmanager.model.TaskCollection;
 import main.java.com.taskmanager.persistence.FileHandler;
 import main.java.com.taskmanager.util.Messages;
 
 import java.time.LocalDate;
-import java.util.Map;
 import java.util.Scanner;
 
 
 public class AddTask {
 
 
-    public static void AddTaskForm(Map<Integer, Task> tasks, Scanner scanner) {
+    public static void AddTaskForm(TaskCollection tasks, Scanner scanner) {
+
         boolean openAddTaskForm = true;
 
         System.out.println(Messages.ADD_TASK_VIEW);
 
+
         while (openAddTaskForm) {
 
-            int taskId = tasks.keySet().stream()
-                    .max(Integer::compareTo)
-                    .orElse(0) + 1;
+            int taskId = tasks.getNewId();
 
             String taskTitle = promptTitleOrDescription(Messages.ADD_TASK_TITLE, scanner);
+
             String taskDescription = promptTitleOrDescription(Messages.ADD_TASK_DESCRIPTION, scanner);
 
-            String taskStatus = promptStatus(scanner);
+            TaskStatus taskStatus = promptStatus(scanner);
 
             LocalDate taskDueDate = promptDueDate(scanner);
 
             Task newTask = new Task(taskId, taskTitle, taskDescription, taskStatus, taskDueDate);
 
-            FileHandler.saveNewTask(tasks, newTask);
 
+            boolean isNewTaskSaved = FileHandler.saveNewTask(newTask);
+            if (isNewTaskSaved) {
+                tasks.addTask(newTask);
+            }
+
+            System.out.println(Messages.RETURN_TO_MAIN_MENU);
             openAddTaskForm = false;
         }
     }
@@ -56,14 +63,17 @@ public class AddTask {
     }
 
 
-    private static String promptStatus(Scanner scanner) {
-        String status = "";
+    private static TaskStatus promptStatus(Scanner scanner) {
+        TaskStatus status = null;
 
-        while (!"COMPLETED".equals(status) && !"PENDING".equals(status)) {
+        while (status == null) {
             System.out.print(Messages.ADD_TASK_STATUS);
-            status = scanner.nextLine().trim().toUpperCase();
+            String input = scanner.nextLine().trim().toUpperCase();
 
-            if (!"COMPLETED".equals(status) && !"PENDING".equals(status)) {
+            try {
+                status = TaskStatus.valueOf(input);
+
+            } catch (IllegalArgumentException e) {
                 System.out.println(Messages.INVALID_INPUT_ADD_TASK_STATUS);
             }
         }

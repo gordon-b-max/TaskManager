@@ -1,15 +1,13 @@
-### IntelliJ IDEA ###
+# IntelliJ IDEA
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 .idea/
 *.iml
 
-### Mac OS ###
+# Mac OS
 .DS_Store
 
-### Task Data ###
-!**/src/main/resources/data/
+# Task Data
+src/main/resources/data/tasks.csv
 
-### Logs ###
+# Logs
 *.log

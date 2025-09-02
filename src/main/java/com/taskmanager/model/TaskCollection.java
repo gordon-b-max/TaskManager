@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import main.java.com.taskmanager.persistence.FileHandler;
-import main.java.com.taskmanager.util.Messages;
+import main.java.com.taskmanager.persistence.LoadFile;
+import main.java.com.taskmanager.util.Constants;
 import main.java.com.taskmanager.util.LoadStatus;
 
 
@@ -22,7 +22,7 @@ public class TaskCollection {
 
 
     public TaskCollection() {
-        this.loadStatus = FileHandler.loadTasks(this);
+        this.loadStatus = LoadFile.loadTasks(this);
     }
 
 
@@ -58,7 +58,7 @@ public class TaskCollection {
         Task overwrittenTask = tasks.put(task.getId(), task);
 
         if (overwrittenTask != null) {
-            LOGGER.log(Level.WARNING, String.format(Messages.FILE_HANDLER_WARNING_DUPLICATED_TASK,
+            LOGGER.log(Level.WARNING, String.format(Constants.FILE_HANDLER_WARNING_DUPLICATED_TASK,
                     overwrittenTask));
         }
     }

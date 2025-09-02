@@ -1,12 +1,12 @@
 package main.java.com.taskmanager;
 
 import main.java.com.taskmanager.model.TaskCollection;
-import main.java.com.taskmanager.persistence.FileHandler;
+import main.java.com.taskmanager.persistence.LoadFile;
 import main.java.com.taskmanager.service.DeleteTask;
 import main.java.com.taskmanager.service.ListTasks;
 import main.java.com.taskmanager.service.AddTask;
 import main.java.com.taskmanager.service.UpdateTaskStatus;
-import main.java.com.taskmanager.util.Messages;
+import main.java.com.taskmanager.util.Constants;
 import main.java.com.taskmanager.util.LoadStatus;
 
 import java.util.Scanner;
@@ -28,27 +28,27 @@ public class Menu {
         }
 
 
-        System.out.println(Messages.MENU_WELCOME);
+        System.out.println(Constants.MENU_WELCOME);
 
         while (openMainMenu) {
 
-            System.out.println(Messages.MENU_OPTIONS);
+            System.out.println(Constants.MENU_OPTIONS);
 
             String input = scanner.nextLine().trim();
 
             switch (input) {
 
-                case Messages.INPUT_1 -> ListTasks.ListOptions(tasks, scanner);
+                case Constants.INPUT_1 -> ListTasks.ListOptions(tasks, scanner);
 
-                case Messages.INPUT_2 -> AddTask.AddTaskForm(tasks, scanner);
+                case Constants.INPUT_2 -> AddTask.AddTaskForm(tasks, scanner);
 
-                case Messages.INPUT_3 -> UpdateTaskStatus.UpdateTaskStatusForm(tasks, scanner);
+                case Constants.INPUT_3 -> UpdateTaskStatus.UpdateTaskStatusForm(tasks, scanner);
 
-                case Messages.INPUT_4 -> DeleteTask.DeleteTaskForm(tasks, scanner);
+                case Constants.INPUT_4 -> DeleteTask.DeleteTaskForm(tasks, scanner);
 
-                case Messages.INPUT_5 -> openMainMenu = false;
+                case Constants.INPUT_5 -> openMainMenu = false;
 
-                default -> System.out.println(Messages.INVALID_INPUT_MENU);
+                default -> System.out.println(Constants.INVALID_INPUT_MENU);
             }
         }
     }
@@ -56,17 +56,17 @@ public class Menu {
 
     private static void handleCreateNewFile() {
 
-        System.out.println(Messages.CREATE_NEW_FILE_PROMPT);
-        System.out.println(Messages.TASK_CHANGE_CONFIRM);
+        System.out.println(Constants.CREATE_NEW_FILE_PROMPT);
+        System.out.println(Constants.TASK_CHANGE_CONFIRM);
 
         String inputCreateNewFile = promptCreateNewFile();
 
-        if (Messages.INPUT_1.equals(inputCreateNewFile)) {
-            FileHandler.createNewFile();
+        if (Constants.INPUT_1.equals(inputCreateNewFile)) {
+            LoadFile.createNewFile();
         }
 
-        if (Messages.INPUT_2.equals(inputCreateNewFile)) {
-            System.out.println(Messages.CREATE_NEW_FILE_CANCEL);
+        if (Constants.INPUT_2.equals(inputCreateNewFile)) {
+            System.out.println(Constants.CREATE_NEW_FILE_CANCEL);
             System.exit(0);
         }
     }
@@ -80,8 +80,8 @@ public class Menu {
 
             input = scanner.nextLine().trim();
 
-            if (!Messages.INPUT_1.equals(input) && !Messages.INPUT_2.equals(input)) {
-                System.out.println(Messages.INVALID_INPUT_CREATE_NEW_FILE);
+            if (!Constants.INPUT_1.equals(input) && !Constants.INPUT_2.equals(input)) {
+                System.out.println(Constants.INVALID_INPUT_CREATE_NEW_FILE);
             }
         }
 

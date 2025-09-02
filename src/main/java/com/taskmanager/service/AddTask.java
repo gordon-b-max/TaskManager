@@ -3,8 +3,8 @@ package main.java.com.taskmanager.service;
 import main.java.com.taskmanager.model.Task;
 import main.java.com.taskmanager.model.TaskStatus;
 import main.java.com.taskmanager.model.TaskCollection;
-import main.java.com.taskmanager.persistence.FileHandler;
-import main.java.com.taskmanager.util.Messages;
+import main.java.com.taskmanager.persistence.UpdateFile;
+import main.java.com.taskmanager.util.Constants;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -17,16 +17,16 @@ public class AddTask {
 
         boolean openAddTaskForm = true;
 
-        System.out.println(Messages.ADD_TASK_VIEW);
+        System.out.println(Constants.ADD_TASK_VIEW);
 
 
         while (openAddTaskForm) {
 
             int taskId = tasks.getNewId();
 
-            String taskTitle = promptTitleOrDescription(Messages.ADD_TASK_TITLE, scanner);
+            String taskTitle = promptTitleOrDescription(Constants.ADD_TASK_TITLE, scanner);
 
-            String taskDescription = promptTitleOrDescription(Messages.ADD_TASK_DESCRIPTION, scanner);
+            String taskDescription = promptTitleOrDescription(Constants.ADD_TASK_DESCRIPTION, scanner);
 
             TaskStatus taskStatus = promptStatus(scanner);
 
@@ -35,12 +35,12 @@ public class AddTask {
             Task newTask = new Task(taskId, taskTitle, taskDescription, taskStatus, taskDueDate);
 
 
-            boolean isNewTaskSaved = FileHandler.saveNewTask(newTask);
+            boolean isNewTaskSaved = UpdateFile.saveNewTask(newTask);
             if (isNewTaskSaved) {
                 tasks.addTask(newTask);
             }
 
-            System.out.println(Messages.RETURN_TO_MAIN_MENU);
+            System.out.println(Constants.RETURN_TO_MAIN_MENU);
             openAddTaskForm = false;
         }
     }
@@ -54,7 +54,7 @@ public class AddTask {
             input = scanner.nextLine().trim();
 
             if (input.contains(",")) {
-                System.out.println(Messages.INVALID_INPUT_ADD_TASK_TITLE_OR_DESCRIPTION);
+                System.out.println(Constants.INVALID_INPUT_ADD_TASK_TITLE_OR_DESCRIPTION);
                 input = "";
             }
         }
@@ -67,14 +67,14 @@ public class AddTask {
         TaskStatus status = null;
 
         while (status == null) {
-            System.out.print(Messages.ADD_TASK_STATUS);
+            System.out.print(Constants.ADD_TASK_STATUS);
             String input = scanner.nextLine().trim().toUpperCase();
 
             try {
                 status = TaskStatus.valueOf(input);
 
             } catch (IllegalArgumentException e) {
-                System.out.println(Messages.INVALID_INPUT_ADD_TASK_STATUS);
+                System.out.println(Constants.INVALID_INPUT_ADD_TASK_STATUS);
             }
         }
 
@@ -86,13 +86,13 @@ public class AddTask {
         LocalDate dueDate = null;
 
         while (dueDate == null) {
-            System.out.print(Messages.ADD_TASK_DUE_DATE);
+            System.out.print(Constants.ADD_TASK_DUE_DATE);
             String input = scanner.nextLine().trim();
 
             try {
                 dueDate = LocalDate.parse(input);
             } catch (Exception e) {
-                System.out.println(Messages.INVALID_INPUT_ADD_TASK_DUE_DATE);
+                System.out.println(Constants.INVALID_INPUT_ADD_TASK_DUE_DATE);
             }
         }
 

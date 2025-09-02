@@ -1,7 +1,7 @@
 package main.java.com.taskmanager.util;
 
 
-public class Messages {
+public class Constants {
 
     // Menu View
     public static final String MENU_WELCOME = "\nHello SAS! Welcome to the Task Manager Menu";
@@ -101,7 +101,11 @@ public class Messages {
     public static final String DELETE_TASK_CANCEL = "Canceling task deletion.";
 
 
-    // FileHandler
+    // LoadFile
+    public static final String FILE_NAME = "src/main/resources/data/tasks.csv";
+
+    public static final String FILE_HEADERS = "id,title,description,status,dueDate\n";
+
     public static final String FILE_HANDLER_FILE_NOT_FOUND = "File does not exist in folder: ";
 
     public static final String FILE_HANDLER_ERROR_LOAD_FILE = """

@@ -2,7 +2,7 @@ package main.java.com.taskmanager.service;
 
 import main.java.com.taskmanager.model.Task;
 import main.java.com.taskmanager.model.TaskCollection;
-import main.java.com.taskmanager.util.Messages;
+import main.java.com.taskmanager.util.Constants;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,21 +16,21 @@ public class ListTasks {
         boolean openListMenu = true;
 
         while (openListMenu) {
-            System.out.println(Messages.LIST_TASKS_VIEW);
+            System.out.println(Constants.LIST_TASKS_VIEW);
 
             String input = scanner.nextLine().trim();
 
             switch (input) {
 
-                case Messages.INPUT_1 -> showAllTasks(tasks);
+                case Constants.INPUT_1 -> showAllTasks(tasks);
 
-                case Messages.INPUT_2 -> showCompletedTasks(tasks);
+                case Constants.INPUT_2 -> showCompletedTasks(tasks);
 
-                case Messages.INPUT_3 -> showPendingTasks(tasks);
+                case Constants.INPUT_3 -> showPendingTasks(tasks);
 
-                case Messages.INPUT_4 -> openListMenu = false;
+                case Constants.INPUT_4 -> openListMenu = false;
 
-                default -> System.out.println(Messages.INVALID_INPUT_LIST_OPTIONS);
+                default -> System.out.println(Constants.INVALID_INPUT_LIST_OPTIONS);
             }
         }
     }
@@ -39,7 +39,7 @@ public class ListTasks {
     private static void showAllTasks(TaskCollection tasks) {
         List<Task> listAllTasks = tasks.listAllTasks();
 
-        System.out.println(Messages.LIST_TASKS_ALL);
+        System.out.println(Constants.LIST_TASKS_ALL);
         listAllTasks.forEach(System.out::println);
     }
 
@@ -47,7 +47,7 @@ public class ListTasks {
     private static void showCompletedTasks(TaskCollection tasks) {
         List<Task> listCompletedTasks = tasks.listCompletedTasks();
 
-        System.out.println(Messages.LIST_TASKS_COMPLETED);
+        System.out.println(Constants.LIST_TASKS_COMPLETED);
         listCompletedTasks.forEach(System.out::println);
     }
 
@@ -55,7 +55,7 @@ public class ListTasks {
     private static void showPendingTasks(TaskCollection tasks) {
         List<Task> listPendingTasks = tasks.listPendingTasks();
 
-        System.out.println(Messages.LIST_TASKS_PENDING);
+        System.out.println(Constants.LIST_TASKS_PENDING);
         listPendingTasks.forEach(System.out::println);
     }
 }

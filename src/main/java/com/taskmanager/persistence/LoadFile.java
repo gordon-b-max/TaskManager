@@ -24,14 +24,14 @@ public class LoadFile {
     private static final Logger LOGGER = Logger.getLogger(LoadFile.class.getName());
 
 
-    public static LoadStatus loadTasks(TaskCollection tasks) {
+    public static LoadStatus loadTasks(TaskCollection tasks, String fileName) {
 
         boolean isHeaders = true;
 
-        File file = new File(Constants.FILE_NAME);
+        File file = new File(fileName);
 
         if (!file.exists()) {
-            LOGGER.log(Level.WARNING, Constants.FILE_HANDLER_FILE_NOT_FOUND + Constants.FILE_NAME);
+            LOGGER.log(Level.WARNING, Constants.FILE_HANDLER_FILE_NOT_FOUND + fileName);
             return LoadStatus.FILE_NOT_FOUND;
         }
 
@@ -45,7 +45,7 @@ public class LoadFile {
                     continue;
                 }
 
-                Task processedTask = processTask(line);
+                Task processedTask = processTask(line, fileName);
 
                 if (processedTask == null) {
                     continue;
@@ -57,13 +57,13 @@ public class LoadFile {
             return LoadStatus.SUCCESS;
 
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, String.format(Constants.FILE_HANDLER_ERROR_LOAD_FILE, Constants.FILE_NAME), e);
+            LOGGER.log(Level.SEVERE, String.format(Constants.FILE_HANDLER_ERROR_LOAD_FILE, fileName), e);
             return LoadStatus.LOAD_ERROR;
         }
     }
 
 
-    private static Task processTask(String taskLine) {
+    private static Task processTask(String taskLine, String fileName) {
 
         String[] taskSplit = taskLine.split(",");
         List<String> taskFields = new ArrayList<>(Arrays.asList(taskSplit));
@@ -71,7 +71,7 @@ public class LoadFile {
 
         if (taskFields.size() != requiredTaskFields) {
             LOGGER.log(Level.WARNING, String.format(Constants.FILE_HANDLER_WARNING_INCORRECT_FIELDS,
-                    requiredTaskFields, taskFields.size(), taskLine, Constants.FILE_NAME));
+                    requiredTaskFields, taskFields.size(), taskLine, fileName));
             return null;
         }
 
@@ -82,7 +82,7 @@ public class LoadFile {
                 taskId = Integer.parseInt(taskFields.getFirst());
             } catch (NumberFormatException e) {
                 LOGGER.log(Level.WARNING, String.format(Constants.FILE_HANDLER_WARNING_PROCESS_TASK_INTEGER,
-                        taskFields.getFirst(), Constants.FILE_NAME));
+                        taskFields.getFirst(), fileName));
                 return null;
             }
 
@@ -94,7 +94,7 @@ public class LoadFile {
                 taskStatus = TaskStatus.valueOf(taskFields.get(3).toUpperCase());
             } catch (IllegalArgumentException e) {
                 LOGGER.log(Level.WARNING, String.format(Constants.FILE_HANDLER_WARNING_PROCESS_TASK_STATUS,
-                        taskLine, Constants.FILE_NAME));
+                        taskLine, fileName));
                 return null;
             }
 
@@ -103,7 +103,7 @@ public class LoadFile {
                 taskDueDate = LocalDate.parse(taskFields.get(4));
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, String.format(Constants.FILE_HANDLER_WARNING_PROCESS_TASK_DATE,
-                        taskLine, Constants.FILE_NAME));
+                        taskLine, fileName));
                 return null;
             }
 
@@ -116,17 +116,17 @@ public class LoadFile {
     }
 
 
-    public static void createNewFile() {
+    public static void createNewFile(String fileName) {
 
-        try (FileWriter fileWriter = new FileWriter(Constants.FILE_NAME)) {
+        try (FileWriter fileWriter = new FileWriter(fileName)) {
 
             fileWriter.write(Constants.FILE_HEADERS);
 
-            LOGGER.log(Level.INFO, String.format(Constants.CREATE_NEW_FILE_SUCCESS, Constants.FILE_NAME));
+            LOGGER.log(Level.INFO, String.format(Constants.CREATE_NEW_FILE_SUCCESS, fileName));
 
         } catch(IOException e) {
             LOGGER.log(Level.SEVERE, String.format(Constants.FILE_HANDLER_ERROR_CREATE_NEW_FILE,
-                    Constants.FILE_NAME), e);
+                    fileName), e);
             System.exit(0);
         }
     }

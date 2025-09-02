@@ -21,8 +21,8 @@ public class TaskCollection {
     private static final Logger LOGGER = Logger.getLogger(TaskCollection.class.getName());
 
 
-    public TaskCollection() {
-        this.loadStatus = LoadFile.loadTasks(this);
+    public TaskCollection(String fileName) {
+        this.loadStatus = LoadFile.loadTasks(this, fileName);
     }
 
 

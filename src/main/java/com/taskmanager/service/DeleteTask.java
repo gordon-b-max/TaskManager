@@ -70,7 +70,7 @@ public class DeleteTask {
             tasks.deleteTask(taskToDelete.getId());
             System.out.println(tasks);
 
-            boolean isTasksSaved = UpdateFile.saveTasks(tasks);
+            boolean isTasksSaved = UpdateFile.saveTasks(tasks, Constants.FILE_NAME);
 
             if (!isTasksSaved) {
                 tasks.addTask(taskToDelete);

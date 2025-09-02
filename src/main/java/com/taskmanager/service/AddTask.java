@@ -35,7 +35,7 @@ public class AddTask {
             Task newTask = new Task(taskId, taskTitle, taskDescription, taskStatus, taskDueDate);
 
 
-            boolean isNewTaskSaved = UpdateFile.saveNewTask(newTask);
+            boolean isNewTaskSaved = UpdateFile.saveNewTask(newTask, Constants.FILE_NAME);
             if (isNewTaskSaved) {
                 tasks.addTask(newTask);
             }

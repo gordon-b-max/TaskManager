@@ -21,7 +21,7 @@ public class Menu {
 
         boolean openMainMenu = true;
 
-        TaskCollection tasks = new TaskCollection();
+        TaskCollection tasks = new TaskCollection(Constants.FILE_NAME);
 
         if (tasks.getLoadStatus() != LoadStatus.SUCCESS) {
             handleCreateNewFile();
@@ -62,7 +62,7 @@ public class Menu {
         String inputCreateNewFile = promptCreateNewFile();
 
         if (Constants.INPUT_1.equals(inputCreateNewFile)) {
-            LoadFile.createNewFile();
+            LoadFile.createNewFile(Constants.FILE_NAME);
         }
 
         if (Constants.INPUT_2.equals(inputCreateNewFile)) {

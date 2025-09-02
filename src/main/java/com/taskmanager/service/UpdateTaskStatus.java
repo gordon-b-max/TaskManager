@@ -78,7 +78,7 @@ public class UpdateTaskStatus {
 
             taskToUpdate.setStatus(updatedTaskStatus);
 
-            boolean isTasksSaved = UpdateFile.saveTasks(tasks);
+            boolean isTasksSaved = UpdateFile.saveTasks(tasks, Constants.FILE_NAME);
 
             if (!isTasksSaved) {
                 taskToUpdate.setStatus(currentTaskStatus);

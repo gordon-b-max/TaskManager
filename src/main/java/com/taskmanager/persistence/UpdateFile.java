@@ -16,9 +16,9 @@ public class UpdateFile {
     private static final Logger LOGGER = Logger.getLogger(UpdateFile.class.getName());
 
 
-    public static boolean saveNewTask(Task newTask) {
+    public static boolean saveNewTask(Task newTask, String fileName) {
 
-        try (FileWriter fileWriter = new FileWriter(Constants.FILE_NAME, true)) {
+        try (FileWriter fileWriter = new FileWriter(fileName, true)) {
 
             fileWriter.write(
                     newTask.getId() + "," +
@@ -32,15 +32,15 @@ public class UpdateFile {
 
         } catch(IOException e) {
             LOGGER.log(Level.SEVERE, String.format(Constants.FILE_HANDLER_ERROR_SAVE_NEW_TASK,
-                    Constants.FILE_NAME), e);
+                    fileName), e);
             return false;
         }
     }
 
 
-    public static boolean saveTasks(TaskCollection tasks) {
+    public static boolean saveTasks(TaskCollection tasks, String fileName) {
 
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(Constants.FILE_NAME))) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
 
             bufferedWriter.write(Constants.FILE_HEADERS);
 
@@ -58,7 +58,7 @@ public class UpdateFile {
             return true;
 
         } catch(IOException e) {
-            LOGGER.log(Level.SEVERE, Constants.FILE_HANDLER_ERROR_SAVE_TASKS + Constants.FILE_NAME, e);
+            LOGGER.log(Level.SEVERE, Constants.FILE_HANDLER_ERROR_SAVE_TASKS + fileName, e);
             return false;
         }
     }
